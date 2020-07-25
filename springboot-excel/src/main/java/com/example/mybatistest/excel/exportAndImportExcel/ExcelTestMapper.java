@@ -1,4 +1,5 @@
 package com.example.mybatistest.excel.exportAndImportExcel;
+import com.example.mybatistest.excel.easyExcel.ExcelEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

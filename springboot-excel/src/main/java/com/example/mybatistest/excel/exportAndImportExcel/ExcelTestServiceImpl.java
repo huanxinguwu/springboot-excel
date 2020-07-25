@@ -21,11 +21,11 @@ public class ExcelTestServiceImpl {
     /**
      * 查询所有数据并封装到excel
      */
-    public SXSSFWorkbook exportExcel(List<ExcelTest> list) {
+    public Workbook exportExcel(List<ExcelTest> list) {
         //查询到的数据
        // List<ExcelTest> list = excelTestMapper.selectAll();
         //开始讲数据封装到excel
-        SXSSFWorkbook workbook = new SXSSFWorkbook();
+        Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("学生成绩表");
         //在sheet中添加表头第0行
         Row row1 = sheet.createRow(0);
@@ -52,25 +52,42 @@ public class ExcelTestServiceImpl {
     }
 
     //将解析到的excel数据插入数据库
-    public void deliverExcel(MultipartFile multipartFile) throws IOException, InvalidFormatException {
-     //String filePath=file.get();
+    public void deliverExcel(MultipartFile multipartFile) throws Exception {
+     String fileName=multipartFile.getOriginalFilename();
+        System.out.println(fileName);
         //读取excel文件
-        InputStream fileInputStream = multipartFile.getInputStream();
-        System.out.println("得到了文件流");
-        int file=fileInputStream.read();
-        System.out.println("文件流的长度是"+file );
+        FileInputStream fileInputStream = (FileInputStream)multipartFile.getInputStream();
+//
+
         String filePath=multipartFile.getOriginalFilename();
         //创建文件输入流
-        //FileInputStream fileInputStreams = new FileInputStream(filePath);
+       // FileInputStream fileInputStreams = new FileInputStream("score.xlsx");
         //创建workbook
-        XSSFWorkbook workbook=new XSSFWorkbook(fileInputStream);
-//        Workbook workbook = WorkbookFactory.create(fileInputStream);
+//        XSSFWorkbook workbook=new XSSFWorkbook(fileInputStream);
+        Workbook workbook = null;
+
+        String[] fileNameArray=fileName.split("\\.");
+        //获取后缀名
+        String extentionName=fileNameArray[fileNameArray.length-1];
+        System.out.println(extentionName);
+        if (extentionName.equalsIgnoreCase("xls")) {
+            // 2003
+            workbook = new HSSFWorkbook(fileInputStream);
+        } else if (extentionName.equalsIgnoreCase("XLSX")) {
+            // 2007
+            workbook = new XSSFWorkbook(fileInputStream);
+        } else {
+            throw new Exception("文件不是Excel文件");
+        }
+
+//Workbook workbooks = WorkbookFactory.create(fileInputStream);
         //得到sheet
         Sheet sheet=workbook.getSheetAt(0);
         //得到行
         Row row=sheet.getRow(0);
         //得到单元格
-        Cell cell=row.getCell(0);
+        Cell cell=row.getCell(1);
+
         //得到值
         System.out.println(cell.getStringCellValue());
         fileInputStream.close();

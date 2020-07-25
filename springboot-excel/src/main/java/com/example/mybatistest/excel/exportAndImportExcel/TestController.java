@@ -2,6 +2,7 @@ package com.example.mybatistest.excel.exportAndImportExcel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +54,7 @@ public class TestController {
           OutputStream outputStream=null;
 //        SXSSFWorkbook wb=excelTestService.exportExcel()
         List<ExcelTest> list=excelTestMapper.selectAll();
-        SXSSFWorkbook wb=excelTestService.exportExcel(list);
+        Workbook wb=excelTestService.exportExcel(list);
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition","attachment;filename="+fileName);
        outputStream=response.getOutputStream();
@@ -65,7 +66,7 @@ public class TestController {
     //上传excel数据并解析，插入数据库
     @ApiOperation("【上传excel并解析】")
     @PostMapping("/deliverExcel")
-    public void deliverExcel(@RequestParam("file") MultipartFile file) throws IOException, InvalidFormatException {
+    public void deliverExcel(@RequestParam("file") MultipartFile file) throws Exception {
 
         String originalFilename=file.getOriginalFilename();
        Long size= file.getSize();
