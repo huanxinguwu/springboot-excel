@@ -51,45 +51,51 @@ public class ExcelTestServiceImpl {
         return  workbook;
     }
 
-    //将解析到的excel数据插入数据库
+    //上传excel，并将解析到的excel数据插入数据库
     public void deliverExcel(MultipartFile multipartFile) throws Exception {
      String fileName=multipartFile.getOriginalFilename();
         System.out.println(fileName);
-        //读取excel文件
+        //获取文件流，读取excel文件
         FileInputStream fileInputStream = (FileInputStream)multipartFile.getInputStream();
-//
-
         String filePath=multipartFile.getOriginalFilename();
-        //创建文件输入流
-       // FileInputStream fileInputStreams = new FileInputStream("score.xlsx");
-        //创建workbook
-//        XSSFWorkbook workbook=new XSSFWorkbook(fileInputStream);
         Workbook workbook = null;
-
         String[] fileNameArray=fileName.split("\\.");
         //获取后缀名
         String extentionName=fileNameArray[fileNameArray.length-1];
         System.out.println(extentionName);
         if (extentionName.equalsIgnoreCase("xls")) {
-            // 2003
+            // 创建2003版excel
             workbook = new HSSFWorkbook(fileInputStream);
         } else if (extentionName.equalsIgnoreCase("XLSX")) {
-            // 2007
+            // 创建2007版excel
             workbook = new XSSFWorkbook(fileInputStream);
         } else {
             throw new Exception("文件不是Excel文件");
         }
-
-//Workbook workbooks = WorkbookFactory.create(fileInputStream);
         //得到sheet
-        Sheet sheet=workbook.getSheetAt(0);
-        //得到行
-        Row row=sheet.getRow(0);
-        //得到单元格
-        Cell cell=row.getCell(1);
+        Sheet sheet=workbook.getSheet("学生成绩表");
+        int rowLength=sheet.getPhysicalNumberOfRows();
+        System.out.println("总行数是："+rowLength);
+        //因为第一行写的是各个列的中文，例如id，姓名，性别，分数，所以从i 从1 开始循环
+        for (int i=1;i<rowLength;i++){
+            //得到行
+            Row row=sheet.getRow(i);
+            //得到第i行第一单元格
+            Cell cell00=row.getCell(0);
+            //得到值
+            int cell1Value=(int)cell00.getNumericCellValue();
+            //第二个单元格的值
+           Cell cell01=row.getCell(1);
+           String cell2Value=cell01.getStringCellValue();
+            //第三个单元格值
+            Cell cell02=row.getCell(2);
+            String cell3Value=cell02.getStringCellValue();
+            //第四个单元格的值
+           Cell cell03=row.getCell(3);
+            int cell4Value=(int)cell03.getNumericCellValue();
+            System.out.println(cell1Value+"-"+cell2Value+"-"+cell3Value+"-"+cell4Value);
+        }
 
-        //得到值
-        System.out.println(cell.getStringCellValue());
         fileInputStream.close();
 
     }

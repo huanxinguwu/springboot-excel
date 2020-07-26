@@ -17,7 +17,7 @@ public class Excel03Read {
     @Test
     public void read03() throws IOException {
         //读取excel文件
-        FileInputStream fileInputStream = new FileInputStream("D:/大数据量.xls");
+        FileInputStream fileInputStream = new FileInputStream("分数统计表.xlsx");
         //创建workbook
         Workbook workbook=new HSSFWorkbook(fileInputStream);
         //得到sheet

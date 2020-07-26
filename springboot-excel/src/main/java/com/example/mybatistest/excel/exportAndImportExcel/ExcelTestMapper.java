@@ -15,4 +15,9 @@ public interface ExcelTestMapper {
         //将解析到的excel数据插入表
         @Insert("insert into excel_test(id,user_name,gender,score) values(#{id},#{userName},#{gender},#{score})")
         int insertExcel();
+
+        //将解析excel得到的数据，批量插入数据库
+    int batchInsert();
+
+    ExcelTest selectById(int id);
 }

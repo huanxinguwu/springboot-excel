@@ -79,4 +79,10 @@ public class TestController {
 
     }
 
+    //使用mybatis配置文件版通过id查询数据
+    @ApiOperation("【注解版查数据】")
+    public  ExcelTest selectByid(int id){
+        return excelTestMapper.selectById(id);
+    }
+
 }
