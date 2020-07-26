@@ -72,8 +72,9 @@ public class ExcelTestServiceImpl {
         } else {
             throw new Exception("文件不是Excel文件");
         }
-        //得到sheet
-        Sheet sheet=workbook.getSheet("学生成绩表");
+        //得到第零个sheet
+        Sheet sheet=workbook.getSheetAt(0);
+        //计算表格总共有多少行
         int rowLength=sheet.getPhysicalNumberOfRows();
         System.out.println("总行数是："+rowLength);
         //因为第一行写的是各个列的中文，例如id，姓名，性别，分数，所以从i 从1 开始循环
