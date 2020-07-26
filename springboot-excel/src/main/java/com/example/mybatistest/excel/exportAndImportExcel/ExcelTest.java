@@ -6,6 +6,7 @@ public class ExcelTest implements Serializable {
     private String gender;
     private Integer score;
 
+
     public Long getId() {
         return id;
     }
